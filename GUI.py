@@ -1,6 +1,33 @@
 from tkinter import *
+from datetime import datetime
 from generate import finish_table
 from sudoku import user_table
+
+temp = 0
+after_id = ''
+
+
+def start_clock():
+    global temp, after_id
+
+    clock_btn1.grid_forget()  # Удаляем кнопку СТАРТ
+    clock_btn2.grid(row=0, column=0, columnspan=3, padx=3, pady=6)  # Добавляем кнопку СТОП
+
+    after_id = root.after(1000, start_clock)
+    f_temp = datetime.fromtimestamp(temp).strftime('%M:%S')
+    clock_lbl.configure(text=str(f_temp))
+    temp += 1
+
+
+def stop_clock():
+    global temp
+
+    clock_btn2.grid_forget()  # Удаляем кнопку СТОП
+    clock_btn1.grid(row=0, column=0, columnspan=3, padx=3, pady=6)  # Добавляем кнопку СТАРТ
+    # Обнуляю секундомер
+    temp = 0
+    clock_lbl.configure(text='00:00')
+    root.after_cancel(after_id)
 
 
 class Board:
@@ -41,7 +68,7 @@ def exit_app():
     root.destroy()
 
 
-# Oкно для судоку
+# GUI для судоку
 root = Tk()
 root.title('SUDOKU')
 root.resizable(width=False, height=False)
@@ -49,6 +76,10 @@ root.configure(bg='black')
 # Секундомер
 clock_lbl = Label(root, width=8, font=('Ubuntu', 13), text='00:00')
 clock_lbl.grid(row=0, column=3, columnspan=3, padx=3, pady=6)
+
+clock_btn1 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Start', command=start_clock)
+clock_btn1.grid(row=0, column=0, columnspan=3, padx=3, pady=6)
+clock_btn2 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Stop', command=stop_clock)
 # Кнопка проверки
 btn1 = Button(root, width=10, font=('Ubuntu', 9), text='CHECK')
 btn1.grid(row=0, column=6, columnspan=3, padx=3, pady=6)

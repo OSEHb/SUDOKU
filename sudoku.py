@@ -29,7 +29,21 @@ def user_table(t, d):
         if user_t[r][c] != 0:
             continue
 
-        if d == 40:
+        if d == 50:
+            nums_row = 0
+            nums_col = 0
+            nums_in_col = [user_t[0][c], user_t[1][c], user_t[2][c], user_t[3][c], user_t[4][c], user_t[5][c],
+                           user_t[6][c], user_t[7][c], user_t[8][c]]
+            for j in user_t[r]:
+                if j != 0:
+                    nums_row += 1
+            for j in nums_in_col:
+                if j != 0:
+                    nums_col += 1
+            if nums_col >= 6 or nums_row >= 6:
+                continue
+
+        elif d == 40:
             nums_row = 0
             nums_col = 0
             nums_in_col = [user_t[0][c], user_t[1][c], user_t[2][c], user_t[3][c], user_t[4][c], user_t[5][c],
@@ -43,21 +57,7 @@ def user_table(t, d):
             if nums_col >= 5 or nums_row >= 5:
                 continue
 
-        elif d == 32:
-            nums_row = 0
-            nums_col = 0
-            nums_in_col = [user_t[0][c], user_t[1][c], user_t[2][c], user_t[3][c], user_t[4][c], user_t[5][c],
-                           user_t[6][c], user_t[7][c], user_t[8][c]]
-            for j in user_t[r]:
-                if j != 0:
-                    nums_row += 1
-            for j in nums_in_col:
-                if j != 0:
-                    nums_col += 1
-            if nums_col >= 4 or nums_row >= 4:
-                continue
-
-        elif d == 28:
+        elif d == 30:
             nums_row = 0
             nums_col = 0
             nums_in_col = [user_t[0][c], user_t[1][c], user_t[2][c], user_t[3][c], user_t[4][c], user_t[5][c],
@@ -79,3 +79,15 @@ def user_table(t, d):
 
     return create_t
 
+
+if __name__ == '__main__':
+    from generate import finish_table
+
+    for rw in user_table(finish_table, 'easy'):
+        print(rw)
+    print('medium')
+    for rw in user_table(finish_table, 'medium'):
+        print(rw)
+    print('hard')
+    for rw in user_table(finish_table, 'hard'):
+        print(rw)
