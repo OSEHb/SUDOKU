@@ -1,5 +1,4 @@
 from tkinter import *
-from tkinter.messagebox import *
 from datetime import datetime
 from generate import finish_table
 from sudoku import user_table
@@ -7,21 +6,25 @@ from sudoku import user_table
 n = 1  # Число от 1 до 9
 temp = 0
 after_id = ''
+test_board = []  # Доска для проверки решения
 
 
-class Numbers_1_9():
+class Numbers_1_9():  # Класс для вывода цифр в клетке доски
 
-    def __init__(self, cell):
-        self.cell = cell
+    def __init__(self, cell, rw, cl):
+        self.rw = rw  # Строка в доске
+        self.cl = cl  # Столбец в доске
+        self.cell = cell  # Пустая клетка
         self.cell.bind('<Button-1>', self.n_in_cell)
 
     def n_in_cell(self, event):
-        global n
+        global n, test_board
 
         if n >= 10:
             n = 1
 
-        self.cell.configure(text=n)
+        self.cell.configure(fg='green', text=n)
+        test_board[self.rw - 1][self.cl] = n
         n += 1
 
 
@@ -48,7 +51,33 @@ def stop_clock():
     root.after_cancel(after_id)
 
 
+def test(event):
+    row = 0
+    col = 0
+
+    for i in test_board:
+        row += 1
+        result = sum(i)
+
+        if result != 45:
+            return status_bar.configure(text='Wrong decision! row: ' + str(row), fg='red')
+
+    for j in range(0, 9):
+        col += 1
+        result = test_board[0][j] + test_board[1][j] + test_board[2][j] + test_board[3][j] + test_board[4][j] + \
+            test_board[5][j] + test_board[6][j] + test_board[7][j] + test_board[8][j]
+
+        if result != 45:
+            return status_bar.configure(text='Wrong decision! column: ' + str(col), fg='red')
+
+    return status_bar.configure(text="Congratulations, you're good!", fg='green')
+
+
 def brd_easy():  # лёгкая доска
+    global test_board
+
+    status_bar.configure(text='')
+
     # Доска
     brd = {}  # Словарь с переменными(клетки на доске судоку)
     for n in range(1, 82):  # Генерация переменных
@@ -56,6 +85,7 @@ def brd_easy():  # лёгкая доска
         brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
 
     board = user_table(finish_table, 'easy')  # Сгенерированная доска из модуля generate
+    test_board = board
     r = 0  # строка в GUI
     c = -1  # столбец в GUI
     brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
@@ -75,7 +105,7 @@ def brd_easy():  # лёгкая доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -83,7 +113,7 @@ def brd_easy():  # лёгкая доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -92,7 +122,7 @@ def brd_easy():  # лёгкая доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
                                 brd[b].configure(text=str(nums))
@@ -100,7 +130,7 @@ def brd_easy():  # лёгкая доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
                                 brd[b].configure(text=str(nums))
@@ -112,6 +142,10 @@ def brd_easy():  # лёгкая доска
 
 
 def brd_medium():  # средняя доска
+    global test_board
+
+    status_bar.configure(text='')
+
     # Доска
     brd = {}  # Словарь с переменными(клетки на доске судоку)
     for n in range(1, 82):  # Генерация переменных
@@ -119,6 +153,7 @@ def brd_medium():  # средняя доска
         brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
 
     board = user_table(finish_table, 'medium')  # Сгенерированная доска из модуля generate
+    test_board = board
     r = 0  # строка в GUI
     c = -1  # столбец в GUI
     brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
@@ -138,7 +173,7 @@ def brd_medium():  # средняя доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -146,7 +181,7 @@ def brd_medium():  # средняя доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -155,7 +190,7 @@ def brd_medium():  # средняя доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
                                 brd[b].configure(text=str(nums))
@@ -163,7 +198,7 @@ def brd_medium():  # средняя доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
                                 brd[b].configure(text=str(nums))
@@ -175,6 +210,10 @@ def brd_medium():  # средняя доска
 
 
 def brd_hard():  # сложная доска
+    global test_board
+
+    status_bar.configure(text='')
+
     # Доска
     brd = {}  # Словарь с переменными(клетки на доске судоку)
     for n in range(1, 82):  # Генерация переменных
@@ -182,6 +221,7 @@ def brd_hard():  # сложная доска
         brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
 
     board = user_table(finish_table, 'hard')  # Сгенерированная доска из модуля generate
+    test_board = board
     r = 0  # строка в GUI
     c = -1  # столбец в GUI
     brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
@@ -201,7 +241,7 @@ def brd_hard():  # сложная доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -209,7 +249,7 @@ def brd_hard():  # сложная доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, pady=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
                                 brd[b].configure(text=str(nums))
@@ -218,7 +258,7 @@ def brd_hard():  # сложная доска
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c, padx=3)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
                                 brd[b].configure(text=str(nums))
@@ -226,7 +266,7 @@ def brd_hard():  # сложная доска
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
                                 brd[b].grid(row=r, column=c)
-                                Numbers_1_9(brd[b])
+                                Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
                                 brd[b].configure(text=str(nums))
@@ -258,6 +298,12 @@ clock_btn2 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Stop', comman
 # Кнопка проверки
 btn = Button(root, width=10, font=('Ubuntu', 9), text='CHECK')
 btn.grid(row=0, column=6, columnspan=3, padx=3, pady=6)
+btn.bind('<Button-1>', test)
+
+# Статус бар
+status_bar = Label(root, relief=SUNKEN, width=25, text='For the start: File - New Game')
+# relief-определяет тип рамки элемента
+status_bar.grid(row=10, columnspan=9, padx=3, pady=6)
 
 # Главное меню окна, с выбором сложности
 main_menu = Menu(root)
@@ -276,3 +322,8 @@ item.add_separator()
 item.add_command(label='Exit', command=exit_app)
 
 root.mainloop()
+
+
+if __name__ == '__main__':
+    for abc in test_board:
+        print(abc)
