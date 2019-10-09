@@ -1,10 +1,28 @@
 from tkinter import *
+from tkinter.messagebox import *
 from datetime import datetime
 from generate import finish_table
 from sudoku import user_table
 
+n = 1  # Число от 1 до 9
 temp = 0
 after_id = ''
+
+
+class Numbers_1_9():
+
+    def __init__(self, cell):
+        self.cell = cell
+        self.cell.bind('<Button-1>', self.n_in_cell)
+
+    def n_in_cell(self, event):
+        global n
+
+        if n >= 10:
+            n = 1
+
+        self.cell.configure(text=n)
+        n += 1
 
 
 def start_clock():
@@ -30,41 +48,196 @@ def stop_clock():
     root.after_cancel(after_id)
 
 
-class Board:
-    # Принимаем сложность уровня
-    def __init__(self, deff):
-        self.deff = deff
+def brd_easy():  # лёгкая доска
+    # Доска
+    brd = {}  # Словарь с переменными(клетки на доске судоку)
+    for n in range(1, 82):  # Генерация переменных
+        n = 'label' + str(n)
+        brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
 
-    # Выводим таблицу в зависимости от сложности
-    def brd(self):
-        board = user_table(finish_table, self.deff)
-        r = 0  # строка
-        c = -1  # столбец
+    board = user_table(finish_table, 'easy')  # Сгенерированная доска из модуля generate
+    r = 0  # строка в GUI
+    c = -1  # столбец в GUI
+    brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
 
-        for row in board:
-            r += 1
+    for row in board:  # строка из полученой таблицы
+        r += 1
 
-            for nums in row:
-                c += 1
-                # if и else дают разницу в отступах между квадратами
-                if r == 1 or r == 3 or r == 4 or r == 6 or r == 7 or r == 9:
-                    if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
-                        label = Label(root, width=2, font=10, text=str(nums))
-                        label.grid(row=r, column=c, padx=3, pady=3)
+        for nums in row:  # значение из полученой таблицы
+            c += 1
+            num_brd = 1  # номер переменной из brd
+            brd_index += 1
+
+            for b in brd:  # переменная из словоря brd(наша визуализация доски)
+                if num_brd == brd_index:
+                    # if и else дают разницу в отступах между квадратами
+                    if r == 1 or r == 3 or r == 4 or r == 6 or r == 7 or r == 9:
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, pady=3)
+                                brd[b].configure(text=str(nums))
+
                     else:
-                        label = Label(root, width=2, font=10, text=str(nums))
-                        label.grid(row=r, column=c, pady=3)
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c)
+                                brd[b].configure(text=str(nums))
+                    break
                 else:
-                    if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
-                        label = Label(root, width=2, font=10, text=str(nums))
-                        label.grid(row=r, column=c, padx=3)
+                    num_brd += 1
+                    continue
+        c = -1
+
+
+def brd_medium():  # средняя доска
+    # Доска
+    brd = {}  # Словарь с переменными(клетки на доске судоку)
+    for n in range(1, 82):  # Генерация переменных
+        n = 'label' + str(n)
+        brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
+
+    board = user_table(finish_table, 'medium')  # Сгенерированная доска из модуля generate
+    r = 0  # строка в GUI
+    c = -1  # столбец в GUI
+    brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
+
+    for row in board:  # строка из полученой таблицы
+        r += 1
+
+        for nums in row:  # значение из полученой таблицы
+            c += 1
+            num_brd = 1  # номер переменной из brd
+            brd_index += 1
+
+            for b in brd:  # переменная из словоря brd(наша визуализация доски)
+                if num_brd == brd_index:
+                    # if и else дают разницу в отступах между квадратами
+                    if r == 1 or r == 3 or r == 4 or r == 6 or r == 7 or r == 9:
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, pady=3)
+                                brd[b].configure(text=str(nums))
+
                     else:
-                        label = Label(root, width=2, font=10, text=str(nums))
-                        label.grid(row=r, column=c)
-            c = -1
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c)
+                                brd[b].configure(text=str(nums))
+                    break
+                else:
+                    num_brd += 1
+                    continue
+        c = -1
 
 
-def exit_app():
+def brd_hard():  # сложная доска
+    # Доска
+    brd = {}  # Словарь с переменными(клетки на доске судоку)
+    for n in range(1, 82):  # Генерация переменных
+        n = 'label' + str(n)
+        brd[n] = Label(root, width=2, font=('Ubuntu', 13))  # Присвоение каждой переменной виджета Label
+
+    board = user_table(finish_table, 'hard')  # Сгенерированная доска из модуля generate
+    r = 0  # строка в GUI
+    c = -1  # столбец в GUI
+    brd_index = 0  # индекс для пропуска уже внесённых переменных из brd
+
+    for row in board:  # строка из полученой таблицы
+        r += 1
+
+        for nums in row:  # значение из полученой таблицы
+            c += 1
+            num_brd = 1  # номер переменной из brd
+            brd_index += 1
+
+            for b in brd:  # переменная из словоря brd(наша визуализация доски)
+                if num_brd == brd_index:
+                    # if и else дают разницу в отступах между квадратами
+                    if r == 1 or r == 3 or r == 4 or r == 6 or r == 7 or r == 9:
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3, pady=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, pady=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, pady=3)
+                                brd[b].configure(text=str(nums))
+
+                    else:
+                        if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c, padx=3)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c, padx=3)
+                                brd[b].configure(text=str(nums))
+
+                        else:
+                            if nums == 0:  # если nums == 0 выводим пустой виджет Label
+                                brd[b].grid(row=r, column=c)
+                                Numbers_1_9(brd[b])
+                            else:
+                                brd[b].grid(row=r, column=c)
+                                brd[b].configure(text=str(nums))
+                    break
+                else:
+                    num_brd += 1
+                    continue
+        c = -1
+
+
+def exit_app():  # Выход из судоку
     root.destroy()
 
 
@@ -73,6 +246,7 @@ root = Tk()
 root.title('SUDOKU')
 root.resizable(width=False, height=False)
 root.configure(bg='black')
+
 # Секундомер
 clock_lbl = Label(root, width=8, font=('Ubuntu', 13), text='00:00')
 clock_lbl.grid(row=0, column=3, columnspan=3, padx=3, pady=6)
@@ -80,9 +254,11 @@ clock_lbl.grid(row=0, column=3, columnspan=3, padx=3, pady=6)
 clock_btn1 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Start', command=start_clock)
 clock_btn1.grid(row=0, column=0, columnspan=3, padx=3, pady=6)
 clock_btn2 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Stop', command=stop_clock)
+
 # Кнопка проверки
-btn1 = Button(root, width=10, font=('Ubuntu', 9), text='CHECK')
-btn1.grid(row=0, column=6, columnspan=3, padx=3, pady=6)
+btn = Button(root, width=10, font=('Ubuntu', 9), text='CHECK')
+btn.grid(row=0, column=6, columnspan=3, padx=3, pady=6)
+
 # Главное меню окна, с выбором сложности
 main_menu = Menu(root)
 root.configure(menu=main_menu)
@@ -92,9 +268,9 @@ main_menu.add_cascade(label='File', menu=item)
 
 difficulty = Menu(item, tearoff=0)
 item.add_cascade(label='New Game', menu=difficulty)
-difficulty.add_radiobutton(label='Easy', command=Board('easy').brd)
-difficulty.add_radiobutton(label='Medium', command=Board('medium').brd)
-difficulty.add_radiobutton(label='Hard', command=Board('hard').brd)
+difficulty.add_radiobutton(label='Easy', command=brd_easy)
+difficulty.add_radiobutton(label='Medium', command=brd_medium)
+difficulty.add_radiobutton(label='Hard', command=brd_hard)
 # Меню выхода с разделителем
 item.add_separator()
 item.add_command(label='Exit', command=exit_app)
