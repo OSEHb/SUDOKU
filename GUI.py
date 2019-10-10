@@ -16,6 +16,7 @@ class Numbers_1_9():  # Класс для вывода цифр в клетке 
         self.cl = cl  # Столбец в доске
         self.cell = cell  # Пустая клетка
         self.cell.bind('<Button-1>', self.n_in_cell)
+        self.cell.bind('<Button-3>', self.del_n_in_cell)
 
     def n_in_cell(self, event):
         global n, test_board
@@ -23,9 +24,13 @@ class Numbers_1_9():  # Класс для вывода цифр в клетке 
         if n >= 10:
             n = 1
 
-        self.cell.configure(fg='green', text=n)
+        self.cell.configure(fg='#085e00', text=n)
         test_board[self.rw - 1][self.cl] = n
         n += 1
+
+    def del_n_in_cell(self, event):
+        self.cell.configure(fg='#085e00', text=' ')
+        test_board[self.rw - 1][self.cl] = 0
 
 
 def start_clock():
@@ -47,7 +52,6 @@ def stop_clock():
     clock_btn1.grid(row=0, column=0, columnspan=3, padx=3, pady=6)  # Добавляем кнопку СТАРТ
     # Обнуляю секундомер
     temp = 0
-    clock_lbl.configure(text='00:00')
     root.after_cancel(after_id)
 
 
@@ -108,7 +112,7 @@ def brd_easy():  # лёгкая доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -116,7 +120,7 @@ def brd_easy():  # лёгкая доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                     else:
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
@@ -125,7 +129,7 @@ def brd_easy():  # лёгкая доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -133,7 +137,7 @@ def brd_easy():  # лёгкая доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
                     break
                 else:
                     num_brd += 1
@@ -176,7 +180,7 @@ def brd_medium():  # средняя доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -184,7 +188,7 @@ def brd_medium():  # средняя доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                     else:
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
@@ -193,7 +197,7 @@ def brd_medium():  # средняя доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -201,7 +205,7 @@ def brd_medium():  # средняя доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
                     break
                 else:
                     num_brd += 1
@@ -244,7 +248,7 @@ def brd_hard():  # сложная доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -252,7 +256,7 @@ def brd_hard():  # сложная доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, pady=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                     else:
                         if c == 0 or c == 2 or c == 3 or c == 5 or c == 6 or c == 8:
@@ -261,7 +265,7 @@ def brd_hard():  # сложная доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c, padx=3)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
 
                         else:
                             if nums == 0:  # если nums == 0 выводим пустой виджет Label
@@ -269,7 +273,7 @@ def brd_hard():  # сложная доска
                                 Numbers_1_9(brd[b], r, c)
                             else:
                                 brd[b].grid(row=r, column=c)
-                                brd[b].configure(text=str(nums))
+                                brd[b].configure(bg='#c3c8db', text=str(nums))
                     break
                 else:
                     num_brd += 1
@@ -285,10 +289,10 @@ def exit_app():  # Выход из судоку
 root = Tk()
 root.title('SUDOKU')
 root.resizable(width=False, height=False)
-root.configure(bg='black')
+root.configure(bg='#1b1e29')
 
 # Секундомер
-clock_lbl = Label(root, width=8, font=('Ubuntu', 13), text='00:00')
+clock_lbl = Label(root, width=8, font=('Ubuntu', 13), text='00:00', bg='#1b1e29', fg='white')
 clock_lbl.grid(row=0, column=3, columnspan=3, padx=3, pady=6)
 
 clock_btn1 = Button(root, width=10, font=('Ubuntu', 9), text='Time-Start', command=start_clock)
@@ -321,6 +325,7 @@ difficulty.add_radiobutton(label='Hard', command=brd_hard)
 item.add_separator()
 item.add_command(label='Exit', command=exit_app)
 
+root.iconbitmap('img\icon.ico')
 root.mainloop()
 
 
